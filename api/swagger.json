@@ -1,0 +1,787 @@
+{
+    "swagger": "2.0",
+    "host": "ozm.host",
+    "info": {
+        "version": "0.0.0",
+        "title": "ozm"
+    },
+    "basePath": "/api",
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/categories": {
+            "get": {
+                "description": "Returns list of categories",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/CategoryScreen"
+                        }
+                    },
+                    "403": {
+                        "description": "unauthorized"
+                    }
+                }
+            }
+        },
+        "/feed/{categoryId}": {
+            "get": {
+                "description": "Return list of images in specified category",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "categoryId",
+                        "description": "If not present default feed is returned",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "query",
+                        "name": "from",
+                        "description": "Starting position in feed.",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "query",
+                        "name": "to",
+                        "description": "Last position in feed",
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Image"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "unauthorized"
+                    },
+                    "404": {
+                        "description": "category not found"
+                    }
+                }
+            }
+        },
+        "/feed/update/{categoryId}": {
+            "get": {
+                "description": "Updates feed by loading new images to its start",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "categoryId",
+                        "description": "If not present default feed is assumed",
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "403": {
+                        "description": "unauthorized"
+                    },
+                    "404": {
+                        "description": "category not found"
+                    }
+                }
+            }
+        },
+        "/feed/{categoryId}/wizard": {
+            "get": {
+                "description": "Return list of images to show in category wizard",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "categoryId",
+                        "description": "Id should be present",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/CategoryWizard"
+                        }
+                    },
+                    "403": {
+                        "description": "unauthorized"
+                    },
+                    "404": {
+                        "description": "category not found"
+                    }
+                }
+            }
+        },
+        "/feed/personal": {
+            "get": {
+                "description": "Return personal feed",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "from",
+                        "description": "Starting position in feed.",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "query",
+                        "name": "to",
+                        "description": "Last position in feed",
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Image"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "unauthorized"
+                    }
+                }
+            }
+        },
+        "/feed/personal/golden/{categoryId}": {
+            "get": {
+                "description": "Return personal feed",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "categoryId",
+                        "description": "Id should be present",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "query",
+                        "name": "from",
+                        "description": "Starting position in feed.",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "in": "query",
+                        "name": "to",
+                        "description": "Last position in feed",
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Image"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "unauthorized"
+                    }
+                }
+            }
+        },
+        "/user/send/actions": {
+            "post": {
+                "description": "Receive action data",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "data",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Actions"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "403": {
+                        "description": "unauthorized"
+                    }
+                }
+            }
+        },
+        "/config": {
+            "get": {
+                "description": "Return current config",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/Config"
+                        }
+                    },
+                    "403": {
+                        "description": "unauthorized"
+                    }
+                }
+            }
+        },
+        "/user/send/data": {
+            "post": {
+                "description": "Receive user data",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "data",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/UserData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "403": {
+                        "description": "unauthorized"
+                    }
+                }
+            }
+        },
+        "/user/send/settings": {
+            "post": {
+                "description": "Receive user settings",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "data",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/UserSettings"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "403": {
+                        "description": "unauthorized"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Actions": {
+            "properties": {
+                "likes": {
+                    "type": "array",
+                    "description": "User liked an image",
+                    "items": {
+                        "$ref": "#/definitions/ImageActionData"
+                    }
+                },
+                "dislikes": {
+                    "type": "array",
+                    "description": "User removed like from image",
+                    "items": {
+                        "$ref": "#/definitions/ImageActionData"
+                    }
+                },
+                "hides": {
+                    "type": "array",
+                    "description": "User hid an image",
+                    "items": {
+                        "$ref": "#/definitions/ImageActionData"
+                    }
+                },
+                "shares": {
+                    "type": "array",
+                    "description": "User shared an image",
+                    "items": {
+                        "$ref": "#/definitions/ShareActionData"
+                    }
+                },
+                "hovers": {
+                    "type": "array",
+                    "description": "User hover on image (UNUSED)",
+                    "items": {
+                        "$ref": "#/definitions/HoverActionData"
+                    }
+                },
+                "categoryPins": {
+                    "type": "array",
+                    "description": "User pinned a category",
+                    "items": {
+                        "$ref": "#/definitions/PinCategoryActionData"
+                    }
+                },
+                "categoryUnpins": {
+                    "type": "array",
+                    "description": "User pinned a category",
+                    "items": {
+                        "$ref": "#/definitions/PinCategoryActionData"
+                    }
+                }
+            }
+        },
+        "PinCategoryActionData": {
+            "required": [
+                "categoryId",
+                "time"
+            ],
+            "properties": {
+                "categoryId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "Action with invalid id will be ignored"
+                },
+                "time": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "ImageActionData": {
+            "required": [
+                "imageId",
+                "time",
+                "categorySourcePersonal"
+            ],
+            "properties": {
+                "imageId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "Action with invalid id will be ignored"
+                },
+                "time": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "categorySourcePersonal": {
+                    "type": "boolean"
+                },
+                "categorySource": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "Absence means general feed. Invalid id will discard action."
+                }
+            }
+        },
+        "HoverActionData": {
+            "required": [
+                "imageId",
+                "time",
+                "duration",
+                "categorySourcePersonal"
+            ],
+            "properties": {
+                "imageId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "Action with invalid id will be ignored"
+                },
+                "time": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "categorySourcePersonal": {
+                    "type": "boolean"
+                },
+                "categorySource": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "Absence means general feed. Invalid id will discard action."
+                },
+                "duration": {
+                    "type": "number",
+                    "format": "double",
+                    "description": "Time of hover in seconds"
+                }
+            }
+        },
+        "ShareActionData": {
+            "required": [
+                "imageId",
+                "time",
+                "applicationId",
+                "categorySourcePersonal"
+            ],
+            "properties": {
+                "imageId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "Action with invalid id will be ignored"
+                },
+                "time": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "categorySourcePersonal": {
+                    "type": "boolean"
+                },
+                "categorySource": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "Absence means general feed. Invalid id will discard action."
+                },
+                "applicationId": {
+                    "type": "string",
+                    "description": "Application to which image was sent"
+                }
+            }
+        },
+        "Image": {
+            "required": [
+                "id",
+                "url",
+                "thumbnailUrl",
+                "width",
+                "height",
+                "thumbnailWidth",
+                "thumbnailHeight"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "url": {
+                    "type": "string",
+                    "description": "use this for sending and image screen"
+                },
+                "sharingUrl": {
+                    "type": "string",
+                    "description": "unused now"
+                },
+                "videoUrl": {
+                    "type": "string",
+                    "description": "video url for messengers that dont support gifs"
+                },
+                "thumbnailUrl": {
+                    "type": "string",
+                    "description": "use this in feed view"
+                },
+                "categoryId": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "categoryDescription": {
+                    "type": "string"
+                },
+                "liked": {
+                    "type": "boolean",
+                    "description": "True if user liked this image"
+                },
+                "shared": {
+                    "type": "boolean",
+                    "description": "True if user send this image to someone"
+                },
+                "width": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "height": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "thumbnailWidth": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "thumbnailHeight": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "isGIF": {
+                    "type": "boolean"
+                },
+                "isNew": {
+                    "type": "boolean",
+                    "description": "show that this images is new"
+                },
+                "isNewBlink": {
+                    "type": "boolean",
+                    "description": "show blinking animation for new image"
+                },
+                "mainColor": {
+                    "type": "string",
+                    "description": "background color for image container"
+                },
+                "timeUsed": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "Will be present if image was liked or shared\""
+                }
+            }
+        },
+        "CategoryScreen": {
+            "properties": {
+                "promos": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Promo"
+                    }
+                },
+                "categories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Category"
+                    }
+                }
+            }
+        },
+        "Promo": {
+            "required": [
+                "description",
+                "line"
+            ],
+            "description": "UNUSED",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "line": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "Line number on which this promo should be displayed."
+                },
+                "categories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Category"
+                    }
+                }
+            }
+        },
+        "Category": {
+            "required": [
+                "id",
+                "description",
+                "backgroundImage",
+                "showNew"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "backgroundImage": {
+                    "type": "string"
+                },
+                "promoBackgroundImage": {
+                    "type": "string",
+                    "description": "use this background image if isPromo == true"
+                },
+                "isPinned": {
+                    "type": "boolean"
+                },
+                "isPromo": {
+                    "type": "boolean"
+                },
+                "promoEnd": {
+                    "type": "string",
+                    "description": "utc unix timestamp of promo end"
+                },
+                "showNew": {
+                    "type": "boolean",
+                    "description": "show tab with new images in category"
+                },
+                "isNew": {
+                    "type": "boolean",
+                    "description": "show that category has updates"
+                }
+            }
+        },
+        "CategoryWizard": {
+            "required": [
+                "images",
+                "moreCount"
+            ],
+            "properties": {
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Image"
+                    }
+                },
+                "moreCount": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "Config": {
+            "required": [
+                "replyUrl",
+                "replyUrlText",
+                "messengerConfigs",
+                "messengerOrder",
+                "gifMessengerOrder",
+                "sharingInformationEnabled"
+            ],
+            "properties": {
+                "sharingInformationEnabled": {
+                    "type": "boolean",
+                    "description": "this unused for now"
+                },
+                "replyUrl": {
+                    "type": "string",
+                    "description": "this (and replyUrlText) is used when user shares about OZM to someone"
+                },
+                "replyUrlText": {
+                    "type": "string"
+                },
+                "obsceneDisabled": {
+                    "type": "boolean",
+                    "description": "current value of flag"
+                },
+                "pushwooshTags": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "description": "map of name->value of pushwoosh tags. value can be integer, string or list of string"
+                },
+                "messengerConfigs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/MessengerConfig"
+                    }
+                },
+                "localyticsSegments": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "localytics segments. ignore for now??"
+                },
+                "messengerOrder": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/MessengerData"
+                    }
+                },
+                "gifMessengerOrder": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/MessengerData"
+                    }
+                }
+            }
+        },
+        "MessengerConfig": {
+            "required": [
+                "applicationId",
+                "supportsGIF",
+                "supportsImageTextReply",
+                "supportsImageReply",
+                "supportsTextReply"
+            ],
+            "properties": {
+                "applicationId": {
+                    "type": "string"
+                },
+                "supportsGIF": {
+                    "type": "boolean"
+                },
+                "supportsImageTextReply": {
+                    "type": "boolean"
+                },
+                "supportsImageReply": {
+                    "type": "boolean"
+                },
+                "supportsTextReply": {
+                    "type": "boolean"
+                },
+                "supportsVideo": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "MessengerData": {
+            "required": [
+                "applicationId"
+            ],
+            "properties": {
+                "applicationId": {
+                    "type": "string"
+                }
+            }
+        },
+        "UserData": {
+            "required": [
+                "messengers"
+            ],
+            "properties": {
+                "messengers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/MessengerData"
+                    }
+                },
+                "vkData": {
+                    "$ref": "#/definitions/VkData"
+                },
+                "pushwooshToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "UserSettings": {
+            "required": [
+                "obsceneDisabled"
+            ],
+            "properties": {
+                "obsceneDisabled": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "VkData": {
+            "required": [
+                "id",
+                "name",
+                "surname"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
